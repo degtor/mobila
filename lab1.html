@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <!-- CONFIGURATION -->
+
+  <link rel="stylesheet" type="text/css" href="../lab1/style/addtohomescreen.css">
+  <script src="../lab1/src/addtohomescreen.js"></script>
+  <script src="https://code.jquery.com/jquery.js"></script>
+
+  <!-- Allow web app to be run in full-screen mode. -->
+  <meta name="apple-mobile-web-app-capable"
+        content="yes">
+
+  <!-- Make the app title different than the page title. -->
+  <meta name="apple-mobile-web-app-title"
+        content="iOS 8 web app">
+
+  <!-- Configure the status bar. -->
+  <meta name="apple-mobile-web-app-status-bar-style"
+        content="black">
+
+  <!-- Set the viewport. -->
+  <meta name="viewport"
+        content="initial-scale=1">
+
+  <!-- Disable automatic phone number detection. -->
+  <meta name="format-detection"
+        content="telephone=no">
+
+
+<link href="https://placehold.it/114"
+        sizes="114x114"
+        rel="apple-touch-icon-precomposed">
+        
+<link href="https://placehold.it/750x1294"
+        media="(device-width: 375px) and (device-height: 667px)
+               and (-webkit-device-pixel-ratio: 2)"
+        rel="apple-touch-startup-image">
+       
+ <title>Cool Mobile App</title>
+ <meta name="viewport" content="initial-scale=1.0">
+ <meta charset="utf-8">
+ <style>
+  html, body {
+   height: 100%;
+   margin: 0;
+   padding: 0;
+  }
+  #map {
+   height: 100%;
+  }
+ </style>
+</head>
+<body>
+    <input type="button" value="My location now" id="locationNow">
+    <input type="button" value="Långholmen" id="langholmen">
+    <input type="button" value="Fishing spot" id="fishingspot">
+    <input type="button" value="Djurgården" id="djurgarden">
+<div id="map">
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXolPb4gDueC-7Wb5a2-kQvP5TEBW9ITQ&callback=initMap"
+        async defer></script>
+
+<script>
+
+ // STHLM 45 GRADER
+ var mapSTHLM;
+ var sthlm = {lat: 59.329932, lng: 18.067360};
+ var kth = {lat: 59.348223, lng: 18.070278};
+ var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+ var labelIndex = 0;
+ var langholmen = {lat: 59.321815, lng: 18.028532};
+ var fishingspot = {lat: 59.321702, lng: 18.089484};
+ var djurgarden = {lat: 59.325578, lng: 18.112874};
+
+ function initMap() {
+  mapSTHLM = new google.maps.Map(document.getElementById('map'), {
+   center: kth,
+   zoom: 18,
+   mapTypeControl: true,
+   mapTypeControlOptions: {
+    style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+    mapTypeIds: [
+     google.maps.MapTypeId.ROADMAP,
+     google.maps.MapTypeId.TERRAIN,
+     google.maps.MapTypeId.SATELLITE
+    ]
+   },
+   zoomControl: true,
+   zoomControlOptions: {
+    position: google.maps.ControlPosition.TOP_RIGHT
+   },
+   disableDefaultUI: true
+  });
+  mapSTHLM.setTilt(45);
+
+  // Create the DIV to hold the control and call the CenterControl()
+  // constructor passing in this DIV.
+  var centerControlDiv = document.createElement('div');
+  var centerControl = new CenterControl(centerControlDiv, mapSTHLM);
+
+  var tiltControlDiv = document.createElement('div');
+  var tiltControl = new TiltControl(tiltControlDiv);
+
+  centerControlDiv.index = 1;
+  mapSTHLM.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
+  tiltControlDiv.index = 2;
+  mapSTHLM.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(tiltControlDiv);
+
+  google.maps.event.addListener(mapSTHLM, 'click', function(event) {
+   addMarker(event.latLng, mapSTHLM);
+  });
+
+  // Add a marker at the center of the map.
+  addMarker(sthlm, mapSTHLM);
+  addFavouriteMarker(langholmen, mapSTHLM);
+  
+// GEOLOCATION SEGMENT **
+  function goToLocation(pos) {
+    // var infoWindow = new google.maps.InfoWindow({map: mapSTHLM});
+    // infoWindow.setPosition(pos);
+    // infoWindow.setContent('Location found.');
+    console.log(pos);
+    mapSTHLM.setCenter(pos);
+  };
+   
+  $(document).ready(function(){
+    $("#locationNow").click(initiate_geolocation);
+    $("#langholmen").click(goToLocation(langholmen));
+    $("#fishingspot").click(goToLocation(fishingspot));
+    $("#djurgarden").click(goToLocation(djurgarden));
+  }); 
+  
+  function initiate_geolocation() {
+
+    var infoWindow = new google.maps.InfoWindow({map: mapSTHLM});
+
+  // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        infoWindow.setPosition(pos);
+        infoWindow.setContent('Location found.');
+        mapSTHLM.setCenter(pos);
+      }, function() {
+        handleLocationError(true, infoWindow, mapSTHLM.getCenter());
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, mapSTHLM.getCenter());
+    }
+  // END GEOLOCATION SEGMENT **
+  }
+ 
+  
+} // END InitMap()
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.');
+}
+
+
+ // Adds a marker to the map.
+ function addMarker(location, map) {
+  // Add the marker at the clicked location, and add the next-available label
+  // from the array of alphabetical characters.
+
+  var marker = new google.maps.Marker({
+   position: location,
+   draggable: true,
+   animation: google.maps.Animation.DROP,
+   label: labels[labelIndex++ % labels.length],
+   map: mapSTHLM
+  });
+
+  marker.addListener('click', toggleBounce);
+
+  function toggleBounce() {
+   if (marker.getAnimation() !== null) {
+    marker.setAnimation(null);
+   } else {
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+   }
+  }
+
+ }
+   
+   // Adds the langholmen favouritemarker with an infobox.
+ function addFavouriteMarker (langholmen, mapSTHLM) {
+   var contentString = '<div id="content">'+
+     '<div id="siteNotice">'+
+     '</div>'+
+     '<h1 id="firstHeading" class="firstHeading">Långholmen</h1>'+
+     '<div id="bodyContent">'+
+     '<p><b>Långholmen</b>, also referred to as <b>bla bla</b>, is a large ' +
+     'sandstone rock formation in the southern part of the '+
+     'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+     'south west of the nearest large town, Alice Springs; 450&#160;km '+
+     '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
+     'features of the Uluru - Kata Tjuta National Park. Uluru is '+
+     'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+     'Aboriginal people of the area. It has many springs, waterholes, '+
+     'rock caves and ancient paintings. Uluru is listed as a World '+
+     'Heritage Site.</p>'+
+     '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+     'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+     '(last visited June 22, 2009).</p>'+
+     '</div>'+
+     '</div>';
+   
+   var infowindow = new google.maps.InfoWindow({
+     content: contentString
+   });
+
+  var langholmenMarker = new google.maps.Marker({
+   position: langholmen,
+   draggable: false,
+    title: 'Långholmen',
+   map: mapSTHLM
+  });
+
+  langholmenMarker.addListener('click', function () {
+    infowindow.open(mapSTHLM, langholmenMarker);
+  });
+ 
+ }
+ 
+ function CenterControl(controlDiv, mapSTHLM) {
+
+  // Set CSS for the control border.
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = 'transparent';
+  controlUI.style.border = '2px solid #fff';
+  controlUI.style.borderRadius = '3px';
+  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.marginBottom = '22px';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Click to recenter the map';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior.
+  var controlText = document.createElement('div');
+  controlText.style.color = 'rgb(25,25,25, 0.6)';
+  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+  controlText.style.fontSize = '16px';
+  controlText.style.lineHeight = '38px';
+  controlText.style.paddingLeft = '5px';
+  controlText.style.paddingRight = '5px';
+  controlText.innerHTML = 'Center Map / Go to STHLM CITY';
+  controlUI.appendChild(controlText);
+
+  // Setup the click event listeners: simply set the map to Sthlm.
+  controlUI.addEventListener('click', function() {
+   mapSTHLM.setCenter(sthlm);
+  });
+
+ }
+
+ function TiltControl(tiltControlDiv) {
+
+  // Set CSS for the control border.
+  var tiltControlUI = document.createElement('div');
+  tiltControlUI.style.backgroundColor = 'transparent';
+  tiltControlUI.style.border = '2px solid #fff';
+  tiltControlUI.style.borderRadius = '3px';
+  tiltControlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+  tiltControlUI.style.cursor = 'pointer';
+  tiltControlUI.style.marginBottom = '22px';
+  tiltControlUI.style.textAlign = 'center';
+  tiltControlUI.title = 'Click to recenter the map';
+  tiltControlDiv.appendChild(tiltControlUI);
+
+  // Set CSS for the control interior.
+  var tiltControlText = document.createElement('div');
+  tiltControlText.style.color = 'rgb(25,25,25)';
+  tiltControlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+  tiltControlText.style.fontSize = '16px';
+  tiltControlText.style.lineHeight = '38px';
+  tiltControlText.style.paddingLeft = '5px';
+  tiltControlText.style.paddingRight = '5px';
+  tiltControlText.innerHTML = 'TILT OFF';
+  tiltControlUI.appendChild(tiltControlText);
+
+  // Setup the click event listeners: simply set the map to Sthlm.
+  tiltControlUI.addEventListener('click', function() {
+   if (mapSTHLM.getTilt() !== 0) {
+     mapSTHLM.setTilt(0);
+   } else {
+    mapSTHLM.setTilt(45);
+   }
+  });
+
+ }
+
+ addToHomescreen();
+</script>
+</body>
+</html>
