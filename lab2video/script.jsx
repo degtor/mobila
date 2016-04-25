@@ -9,6 +9,9 @@ var Main = React.createClass({
     }
 });
 
+// Video counter
+var n = 0;
+
 // Child
 var Video = React.createClass({
     getInitialState: function() {
@@ -17,7 +20,8 @@ var Video = React.createClass({
             video: videos[n].url,
             rating: videos[n].rating,
             thumbnail: videos[n].thumbnail,
-            category: videos[n].category
+            category: videos[n].category,
+            comments: videos[n].comments
         }
     },
 
@@ -32,7 +36,8 @@ var Video = React.createClass({
             video: videos[n].url,
             title: videos[n].title,
             rating: videos[n].rating,
-            category:videos[n].category
+            category:videos[n].category,
+            comments: videos[n].comments
         });
     },
 
@@ -47,7 +52,8 @@ var Video = React.createClass({
             video: videos[n].url,
             title: videos[n].title,
             rating: videos[n].rating,
-            category:videos[n].category
+            category:videos[n].category,
+            comments: videos[n].comments
         });
     },
 
@@ -71,13 +77,18 @@ var ViewVideo = React.createClass({
                 <iframe width="420" height="315" src={this.props.activeVideo.video} frameBorder="0" allowFullScreen></iframe>
                 <span>Rating: {this.props.activeVideo.rating}</span>
                 <span>Category: {this.props.activeVideo.category}</span>
+                <div id="comments">{this.props.activeVideo.comments}</div>
             </div>
         )
     }
 });
 
-// Video counter
-var n = 0;
+// Under konstruktion
+var addComment = React.createClass({
+    render: function () {
+        return (<div></div>)
+    }
+});
 
 // DB
 var videos = [{
@@ -85,21 +96,24 @@ var videos = [{
         url: 'https://www.youtube.com/embed/_xkn0ceDreo', //OBS KRÄVS SPECIELL EMBED URL
         rating: '3',
         thumbnail: '',
-        category: 'Painting'
+        category: 'Painting',
+        comments: ['A winterbarn comment', 'fan händer nu']
     },
     {
         title: 'Sunset Oval',
         url: 'https://www.youtube.com/embed/9xG6IzcGotI',
         rating: '5',
         thumbnail: '',
-        category: ''
+        category: '',
+        comments: ['A sunsetoval comment']
     },
     {
         title: 'Lakeside Path',
         url: 'https://www.youtube.com/embed/1yjGoJokbZg',
         rating: '2',
         thumbnail: '',
-        category: ''
+        category: '',
+        comments: ['A lakesidepath comment']
     }
 ];
 
