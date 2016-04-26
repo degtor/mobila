@@ -1,6 +1,6 @@
 //Main, Parent
 var Main = React.createClass({
-    
+
     render: function() {
         return (
             <div>
@@ -27,7 +27,6 @@ var Video = React.createClass({
             text: ''
         }
     },
-
     nextVideo: function() {
         videos[n]=this.state;
         if (n == videos.length - 1 ) {
@@ -46,7 +45,6 @@ var Video = React.createClass({
             text: ''
         });
     },
-
     prevVideo: function() {
         //console.log(this.state);
         //console.log(videos[n]);
@@ -75,14 +73,13 @@ var Video = React.createClass({
         });
     },
     allVideo: function () {
-        console.log("Hej");
-        if (pressed) {
+        //console.log(pressed);
+        if (pressed == true) {
             pressed = false;
-        }else {
+        }else{
             pressed = true;
-            <div>Hej</div>;
-            ShowAllVideos;
         }
+        this.forceUpdate()
     },
     newComment: function (e) {
         e.preventDefault();
@@ -91,7 +88,7 @@ var Video = React.createClass({
             //console.log(nextItems);
             console.log(this.state.text);
             var nextText = '';
-            this.setState({comments: nextItems, text: nextText}); 
+            this.setState({comments: nextItems, text: nextText});
         }
     },
     onChange: function (e) {
@@ -103,26 +100,47 @@ var Video = React.createClass({
         //console.log(this.state);
         this.setState({rating: this.state.rating+=1});
     },
-    render: function() {
-        return (
-            <div>
-                <div id="nav">
-                    <button onClick={this.prevVideo}>Previous</button>
-                    <button onClink={this.allVideo}>All</button>
-                    <button onClick={this.nextVideo}>Next</button>
-                </div>
+    addVideo: function () {
 
-                <ViewVideo activeVideo={this.state} />
+    },
+    deleteVideo: function () {
+
+    },
+    render: function() {
+        if (pressed==true) {
+            return (
                 <div>
-                    <form onSubmit={this.newComment}>
-                        <input id="commentInput" onChange={this.onChange} value={this.state.text}/>
-                        <button id="commentButton">Comment</button>
-                    </form>
-                    <button onClick={this.increaseRating}>+</button>
+                    <div id="nav">
+                        <button onClick={this.addVideo}>Add</button>
+                        <button onClick={this.allVideo}>Current Video</button>
+                        <button onClick={this.deleteVideo}>Delete</button>
+                    </div>
+                    <div>
+                        <ShowAllVideos />
+                    </div>
                 </div>
-                <ViewComment comment={this.state}/>
-            </div>
-        );
+            );
+        }else {
+            return (
+                <div>
+                    <div id="nav">
+                        <button onClick={this.prevVideo}>Previous</button>
+                        <button onClick={this.allVideo}>All</button>
+                        <button onClick={this.nextVideo}>Next</button>
+                    </div>
+
+                    <ViewVideo activeVideo={this.state} />
+                    <div id="container">
+                        <form onSubmit={this.newComment}>
+                            <input id="commentInput" onChange={this.onChange} value={this.state.text}/>
+                            <button id="commentButton">Comment</button>
+                        </form>
+                        <button onClick={this.increaseRating}>+</button>
+                    </div>
+                    <ViewComment comment={this.state}/>
+                </div>
+            );
+        }
     }
 });
 
@@ -130,10 +148,10 @@ var ViewComment = React.createClass({
     render: function() {
         var rows = [];
         for (var i = 0; i < this.props.comment.comments.length; i++) {
-            rows.push(<li>{this.props.comment.comments[i]}</li>);
+            rows.push(<li id="comment">{this.props.comment.comments[i]}</li>);
         }
         return (
-            <div> 
+            <div>
                 <ul id="comments">{rows}</ul>
             </div>
         );
@@ -183,18 +201,36 @@ var ViewVideo = React.createClass({
                     <div id="category">
                         <span>Category: {this.props.activeVideo.category}</span>
                     </div>
-                </div>              
+                </div>
             </div>
         )
     }
 });
 
 var ShowAllVideos = React.createClass({
-    if (pressed) {
-
+    goBack: function() {
+        console.log("click");
     },
+
     render: function() {
-        return (<div>HELLO</div>)
+        var rows = [];
+        for (var i = 0; i < videos.length; i++) {
+            rows.push(
+                <li>
+                    <div class="small" onClick={this.goBack}>
+                        <img class="left" src={videos[i].thumbnail} alt="" width="25%" />
+                        {videos[i].title}
+                    </div>
+
+                </li>
+            );
+                //videos[i]
+        };
+        return (
+            <div>
+                <ul>{rows}</ul>
+            </div>
+        );
     }
 });
 /*

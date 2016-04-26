@@ -1,4 +1,4 @@
-button {
+/*button {
     background-color: #ff6600;
     border: none;
     color: white;
@@ -7,17 +7,38 @@ button {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+}*/
+ul{
+        list-style-type: none;
+}
+.small {
+    width: 25%;
+    height: 100%;
+}
+.small img {
+    width: 100%;
+    height: auto;
+}
+.thumbnailSmall{
+    width: 25%;
+}
+.right{
+    float: right;
+}
+.left{
+    float:left;
 }
 #videoTitle {
     text-align: center;
 }
 #comment {
-    color: red;
+    margin-bottom: 5px;
 
 }
 #rating {
     color: green;
     float: left;
+    margin-bottom: 100px;
 }
 #category {
     color: blue;
@@ -25,6 +46,13 @@ button {
 }
 #video{
 
+}
+#container{
+    margin-top: 5px;
+    width: 100%
+}
+#container button{
+    margin-top: -2;
 }
 #thumbnail{
     width: 100%;
@@ -36,12 +64,12 @@ button {
     height: 50px;
 }
 #commentInput {
+
     float: left;
 }
 #commentButton {
     float: right;
 }
 #comments{
-    float: left;
+    width: 100%;
 }
-
