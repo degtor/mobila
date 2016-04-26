@@ -17,9 +17,11 @@ button {
 }
 #rating {
     color: green;
+    float: left;
 }
 #category {
     color: blue;
+    float: right;
 }
 #video{
 
@@ -33,3 +35,13 @@ button {
     width: 100&;
     height: 50px;
 }
+#commentInput {
+    float: left;
+}
+#commentButton {
+    float: right;
+}
+#comments{
+    float: left;
+}
+

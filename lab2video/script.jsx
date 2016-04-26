@@ -1,5 +1,6 @@
 //Main, Parent
 var Main = React.createClass({
+    
     render: function() {
         return (
             <div>
@@ -28,6 +29,7 @@ var Video = React.createClass({
     },
 
     nextVideo: function() {
+        videos[n]=this.state;
         if (n == videos.length - 1 ) {
             n = 0;
         } else {
@@ -46,6 +48,16 @@ var Video = React.createClass({
     },
 
     prevVideo: function() {
+        //console.log(this.state);
+        //console.log(videos[n]);
+        videos[n]=this.state;
+       /* videos[n]={
+            this.state.title,
+            this.state.video,
+            this.state.rating,
+            this.state.category,
+            this.state.comments};
+        */
         if (n == 0 ) {
             n = videos.length - 1;
         } else {
@@ -63,20 +75,24 @@ var Video = React.createClass({
         });
     },
     allVideo: function () {
+        console.log("Hej");
         if (pressed) {
             pressed = false;
         }else {
             pressed = true;
+            <div>Hej</div>;
             ShowAllVideos;
         }
     },
     newComment: function (e) {
         e.preventDefault();
-        var nextItems = this.state.comments.concat([this.state.text]);
-        //console.log(nextItems);
-        //console.log(this.state.text);
-        var nextText = '';
-        this.setState({comments: nextItems, text: nextText}); 
+        if (this.state.text !== "") {
+            var nextItems = this.state.comments.concat([this.state.text]);
+            //console.log(nextItems);
+            console.log(this.state.text);
+            var nextText = '';
+            this.setState({comments: nextItems, text: nextText}); 
+        }
     },
     onChange: function (e) {
          this.setState({text: e.target.value});
@@ -92,10 +108,12 @@ var Video = React.createClass({
                 </div>
 
                 <ViewVideo activeVideo={this.state} />
-                <form onSubmit={this.newComment}>
-                    <input onChange={this.onChange} value={this.state.text}/>
-                    <button>Comment</button>
-                </form>
+                <div>
+                    <form onSubmit={this.newComment}>
+                        <input id="commentInput" onChange={this.onChange} value={this.state.text}/>
+                        <button id="commentButton">Comment</button>
+                    </form>
+                </div>
                 <ViewComment comment={this.state}/>
             </div>
         );
@@ -110,7 +128,7 @@ var ViewComment = React.createClass({
         }
         return (
             <div> 
-                <ul>{rows}</ul>
+                <ul id="comments">{rows}</ul>
             </div>
         );
     }
@@ -152,11 +170,13 @@ var ViewVideo = React.createClass({
             <div>
                 <h2 id="videoTitle">{this.props.activeVideo.title}</h2>
                 <a id="videoPlayer" href={this.props.activeVideo.video}><div id="video"><img id="thumbnail" src={this.props.activeVideo.thumbnail} alt="" /></div></a>
-                <div id="rating">
-                    <span>Rating: {this.props.activeVideo.rating}</span>
-                </div>
-                <div id="category">
-                    <span>Category: {this.props.activeVideo.category}</span>
+                <div id="videoInformation">
+                    <div id="rating">
+                        <span>Rating: {this.props.activeVideo.rating}</span>
+                    </div>
+                    <div id="category">
+                        <span>Category: {this.props.activeVideo.category}</span>
+                    </div>
                 </div>              
             </div>
         )
@@ -196,7 +216,7 @@ var videos = [{
         url: 'https://m.youtube.com/watch?v=9xG6IzcGotI',
         rating: '5',
         thumbnail: 'http://img.youtube.com/vi/9xG6IzcGotI/0.jpg',
-        category: '',
+        category: 'Painting',
         comments: ['A sunsetoval comment']
     },
     {
@@ -204,7 +224,7 @@ var videos = [{
         url: 'https://m.youtube.com/watch?v=1yjGoJokbZg',
         rating: '2',
         thumbnail: 'http://img.youtube.com/vi/1yjGoJokbZg/0.jpg',
-        category: '',
+        category: 'Painting',
         comments: ['A lakesidepath comment']
     }
 ];
