@@ -98,6 +98,11 @@ var Video = React.createClass({
          this.setState({text: e.target.value});
          //console.log(e.target.value);
     },
+    increaseRating: function(){
+        //console.log(this.state.rating+=1);
+        //console.log(this.state);
+        this.setState({rating: this.state.rating++});
+    },
     render: function() {
         return (
             <div>
@@ -113,6 +118,7 @@ var Video = React.createClass({
                         <input id="commentInput" onChange={this.onChange} value={this.state.text}/>
                         <button id="commentButton">Comment</button>
                     </form>
+                    <button onClick={this.increaseRating}>+</button>
                 </div>
                 <ViewComment comment={this.state}/>
             </div>
@@ -206,7 +212,7 @@ var Comments = React.createClass({
 var videos = [{
         title: 'Winter Barn',
         url: 'https://m.youtube.com/watch?v=_xkn0ceDreo', //OBS KRÄVS SPECIELL EMBED URL /Den funkar inte på mobila eneheter, utan då försöker den tvinga en öppning av appen i stället
-        rating: '3',
+        rating: 3,
         thumbnail: 'http://img.youtube.com/vi/_xkn0ceDreo/0.jpg',
         category: 'Painting',
         comments: ['A winterbarn comment', 'fan händer nu']
@@ -214,7 +220,7 @@ var videos = [{
     {
         title: 'Sunset Oval',
         url: 'https://m.youtube.com/watch?v=9xG6IzcGotI',
-        rating: '5',
+        rating: 5,
         thumbnail: 'http://img.youtube.com/vi/9xG6IzcGotI/0.jpg',
         category: 'Painting',
         comments: ['A sunsetoval comment']
@@ -222,7 +228,7 @@ var videos = [{
     {
         title: 'Lakeside Path',
         url: 'https://m.youtube.com/watch?v=1yjGoJokbZg',
-        rating: '2',
+        rating: 2,
         thumbnail: 'http://img.youtube.com/vi/1yjGoJokbZg/0.jpg',
         category: 'Painting',
         comments: ['A lakesidepath comment']
