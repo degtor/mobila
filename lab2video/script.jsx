@@ -101,7 +101,7 @@ var Video = React.createClass({
     increaseRating: function(){
         //console.log(this.state.rating+=1);
         //console.log(this.state);
-        this.setState({rating: this.state.rating++});
+        this.setState({rating: this.state.rating+=1});
     },
     render: function() {
         return (
