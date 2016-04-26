@@ -22,7 +22,8 @@ var Video = React.createClass({
             rating: videos[n].rating,
             thumbnail: videos[n].thumbnail,
             category: videos[n].category,
-            comments: videos[n].comments
+            comments: videos[n].comments,
+            text: ''
         }
     },
 
@@ -39,7 +40,8 @@ var Video = React.createClass({
             rating: videos[n].rating,
             thumbnail: videos[n].thumbnail,
             category:videos[n].category,
-            comments: videos[n].comments
+            comments: videos[n].comments,
+            text: ''
         });
     },
 
@@ -56,7 +58,8 @@ var Video = React.createClass({
             rating: videos[n].rating,
             thumbnail: videos[n].thumbnail,
             category:videos[n].category,
-            comments: videos[n].comments
+            comments: videos[n].comments,
+            text: ''
         });
     },
     allVideo: function () {
@@ -66,6 +69,18 @@ var Video = React.createClass({
             pressed = true;
             ShowAllVideos;
         }
+    },
+    newComment: function (e) {
+        e.preventDefault();
+        var nextItems = this.state.comments.concat([this.state.text]);
+        //console.log(nextItems);
+        //console.log(this.state.text);
+        var nextText = '';
+        this.setState({comments: nextItems, text: nextText}); 
+    },
+    onChange: function (e) {
+         this.setState({text: e.target.value});
+         //console.log(e.target.value);
     },
     render: function() {
         return (
@@ -77,12 +92,58 @@ var Video = React.createClass({
                 </div>
 
                 <ViewVideo activeVideo={this.state} />
-                <addComment activeVideo={this.state} />
-
+                <form onSubmit={this.newComment}>
+                    <input onChange={this.onChange} value={this.state.text}/>
+                    <button>Comment</button>
+                </form>
+                <ViewComment comment={this.state}/>
             </div>
         );
     }
 });
+
+var ViewComment = React.createClass({
+    render: function() {
+        var rows = [];
+        for (var i = 0; i < this.props.comment.comments.length; i++) {
+            rows.push(<li>{this.props.comment.comments[i]}</li>);
+        }
+        return (
+            <div> 
+                <ul>{rows}</ul>
+            </div>
+        );
+    }
+    });
+/*
+var Comment = React.createClass({
+    getInitialState: function() {
+
+        return {items: videos[n].comments, text: ''};
+    },
+    onChange: function(e) {
+        this.setState({text: e.target.value});
+    },
+    handleSubmit: function(e) {
+        e.preventDefault();
+        var nextItems = this.state.items.concat([{text: this.state.text, id: Date.now()}]);
+        var nextText = '';
+        this.setState({items: nextItems, text: nextText});
+    },
+    render: function() {
+        return (
+            <div id="comments">
+                <p>Comments</p>
+                <Comments items={this.state.items} />
+                <form onSubmit={this.handleSubmit}>
+                    <input onChange={this.onChange} value={this.state.text} />
+                    <button>Comment</button>
+                </form>
+            </div>
+        );
+    }
+});
+*/
 
 // Child-child
 var ViewVideo = React.createClass({
@@ -96,8 +157,7 @@ var ViewVideo = React.createClass({
                 </div>
                 <div id="category">
                     <span>Category: {this.props.activeVideo.category}</span>
-                </div>
-                <div id="comments">{this.props.activeVideo.comments}</div>
+                </div>              
             </div>
         )
     }
@@ -111,21 +171,20 @@ var ShowAllVideos = React.createClass({
         return (<div>HELLO</div>)
     }
 });
+/*
 // Under konstruktion
-var addComment = React.createClass({
-    render: function () {
-        return (
-            <div>
-                <h2>HELLO</h2>
-            </div>
-        )
+var Comments = React.createClass({
+    render: function() {
+        var createItem = function(item) {
+            return <li>{item}</li>;
+        };
+        return <ul>{this.props.items.map(createItem)}</ul>;
     }
 });
-
+*/
 // DB
 var videos = [{
         title: 'Winter Barn',
-        id: '_xkn0ceDreo',
         url: 'https://m.youtube.com/watch?v=_xkn0ceDreo', //OBS KRÄVS SPECIELL EMBED URL /Den funkar inte på mobila eneheter, utan då försöker den tvinga en öppning av appen i stället
         rating: '3',
         thumbnail: 'http://img.youtube.com/vi/_xkn0ceDreo/0.jpg',
@@ -134,7 +193,6 @@ var videos = [{
     },
     {
         title: 'Sunset Oval',
-        id: '9xG6IzcGotI',
         url: 'https://m.youtube.com/watch?v=9xG6IzcGotI',
         rating: '5',
         thumbnail: 'http://img.youtube.com/vi/9xG6IzcGotI/0.jpg',
@@ -143,7 +201,6 @@ var videos = [{
     },
     {
         title: 'Lakeside Path',
-        id: '1yjGoJokbZg',
         url: 'https://m.youtube.com/watch?v=1yjGoJokbZg',
         rating: '2',
         thumbnail: 'http://img.youtube.com/vi/1yjGoJokbZg/0.jpg',
