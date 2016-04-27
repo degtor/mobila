@@ -1,6 +1,7 @@
 //Main, Parent
 var Main = React.createClass({
 
+
     render: function() {
         return (
             <div>
@@ -92,16 +93,52 @@ var Video = React.createClass({
         }
     },
     onChange: function (e) {
-         this.setState({text: e.target.value});
-         //console.log(e.target.value);
+         this.setState({
+             text: e.target.value
+         });
     },
+    onChangeTitle: function (e){
+        this.setState({
+            newTitle: e.target.value
+        })
+    },
+    onChangeUrl: function (e){
+        this.setState({
+            newUrl: e.target.value
+        })
+    },
+    onChangeRating: function (e){
+        this.setState({
+            newRating: e.target.value
+        })
+    },
+    onChangeThumbnail: function (e){
+        this.setState({
+            newThumbnail: e.target.value
+        })
+    },
+    onChangeCategory: function (e){
+        this.setState({
+            newCategory: e.target.value
+        })
+    },
+
     increaseRating: function(){
         //console.log(this.state.rating+=1);
         //console.log(this.state);
         this.setState({rating: this.state.rating+=1});
     },
-    addVideo: function () {
-
+    addVideo: function (e) {
+        e.preventDefault();
+        videos.push({
+            title: this.state.newTitle,
+            url: this.state.newUrl,
+            rating: this.state.newRating,
+            thumbnail: this.state.newThumbnail,
+            category: this.state.newCategory,
+            comments: []
+        });
+        console.log(videos);
     },
     deleteVideo: function () {
 
@@ -111,12 +148,23 @@ var Video = React.createClass({
             return (
                 <div>
                     <div id="nav">
-                        <button onClick={this.addVideo}>Add</button>
                         <button onClick={this.allVideo}>Current Video</button>
                         <button onClick={this.deleteVideo}>Delete</button>
                     </div>
+                    <div id="add">
+                        <div id="addContainer">
+                            <form onSubmit={this.addVideo}>
+                                <button onClick={this.addVideo}>Add</button>
+                                <input id="addInput" placeholder="title" onChange={this.onChangeTitle} value={this.state.newTitle}/>
+                                <input id="addInput" placeholder="url" onChange={this.onChangeUrl} value={this.state.newUrl}/>
+                                <input id="addInput" placeholder="rating" onChange={this.onChangeRating} value={this.state.newRating}/>
+                                <input id="addInput" placeholder="thumbnail" onChange={this.onChangeThumbnail} value={this.state.newThumbnail}/>
+                                <input id="addInput" placeholder="category" onChange={this.onChangeCategory} value={this.state.newCategory}/>
+                            </form>
+                        </div>
+                    </div>
                     <div>
-                        <ShowAllVideos />
+                        <ShowAllVideos video={this.state} />
                     </div>
                 </div>
             );
@@ -212,6 +260,11 @@ var ShowAllVideos = React.createClass({
         console.log("click");
     },
 
+    deleteVideo: function(i) {
+        videos.splice(i, 1);
+        console.log(videos);
+    },
+
     render: function() {
         var rows = [];
         for (var i = 0; i < videos.length; i++) {
@@ -221,10 +274,11 @@ var ShowAllVideos = React.createClass({
                         <img class="left" src={videos[i].thumbnail} alt="" width="25%" />
                         {videos[i].title}
                     </div>
-
+                    <button onClick={this.deleteVideo.bind(this.i)}>Delete</button>
                 </li>
             );
-                //videos[i]
+
+            //videos[i]
         };
         return (
             <div>
@@ -233,17 +287,7 @@ var ShowAllVideos = React.createClass({
         );
     }
 });
-/*
-// Under konstruktion
-var Comments = React.createClass({
-    render: function() {
-        var createItem = function(item) {
-            return <li>{item}</li>;
-        };
-        return <ul>{this.props.items.map(createItem)}</ul>;
-    }
-});
-*/
+
 // DB
 var videos = [{
         title: 'Winter Barn',
@@ -251,7 +295,7 @@ var videos = [{
         rating: 3,
         thumbnail: 'http://img.youtube.com/vi/_xkn0ceDreo/0.jpg',
         category: 'Painting',
-        comments: ['A winterbarn comment', 'fan händer nu']
+        comments: ['A winterbarn comment']
     },
     {
         title: 'Sunset Oval',
