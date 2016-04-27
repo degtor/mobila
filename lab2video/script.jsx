@@ -140,16 +140,13 @@ var Video = React.createClass({
         });
         console.log(videos);
     },
-    deleteVideo: function () {
-
-    },
+    
     render: function() {
         if (pressed==true) {
             return (
                 <div>
                     <div id="nav">
                         <button onClick={this.allVideo}>Current Video</button>
-                        <button onClick={this.deleteVideo}>Delete</button>
                     </div>
                     <div id="add">
                         <div id="addContainer">
@@ -263,6 +260,7 @@ var ShowAllVideos = React.createClass({
     deleteVideo: function(i) {
         videos.splice(i, 1);
         console.log(videos);
+        this.forceUpdate();
     },
 
     render: function() {
