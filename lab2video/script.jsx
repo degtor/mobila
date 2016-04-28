@@ -90,6 +90,7 @@ var Video = React.createClass({
             console.log(this.state.text);
             var nextText = '';
             this.setState({comments: nextItems, text: nextText});
+            this.setCookie('comments', this.state.text, 1);
         }
     },
     onChange: function (e) {
@@ -127,18 +128,38 @@ var Video = React.createClass({
         //console.log(this.state.rating+=1);
         //console.log(this.state);
         this.setState({rating: this.state.rating+=1});
+        this.setCookie('rating', this.state.rating+=1, 1);
     },
+
+    setCookie: function(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+d.toUTCString();
+        document.cookie = cname + "=" + cvalue + "; " + expires;
+    },
+
     addVideo: function (e) {
         e.preventDefault();
-        videos.push({
+       var x = {
             title: this.state.newTitle,
             url: this.state.newUrl,
             rating: this.state.newRating,
             thumbnail: this.state.newThumbnail,
             category: this.state.newCategory,
             comments: []
-        });
-        console.log(videos);
+        };
+
+        videos.push(x);
+        localStorage.setItem(this.state.newTitle, x);
+
+/*      this.setCookie('title', this.state.newTitle, 1);
+        this.setCookie('url', this.state.newUrl, 1);
+        this.setCookie('rating', this.state.newRating, 1);
+        this.setCookie('thumbnail', this.state.newThumbnail, 1);
+        this.setCookie('category', this.state.newCategory, 1);*/
+
+
+        this.forceUpdate();
     },
     
     render: function() {
@@ -272,7 +293,7 @@ var ShowAllVideos = React.createClass({
                         <img class="left" src={videos[i].thumbnail} alt="" width="25%" />
                         {videos[i].title}
                     </div>
-                    <button onClick={this.deleteVideo.bind(this.i)}>Delete</button>
+                    <button onClick={this.deleteVideo.bind(this, i)}>Delete</button>
                 </li>
             );
 
