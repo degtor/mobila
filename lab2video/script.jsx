@@ -84,6 +84,7 @@ var Video = React.createClass({
     },
     newComment: function (e) {
         e.preventDefault();
+        
         if (this.state.text !== "") {
             var nextItems = this.state.comments.concat([this.state.text]);
             //console.log(nextItems);
@@ -91,6 +92,8 @@ var Video = React.createClass({
             var nextText = '';
             this.setState({comments: nextItems, text: nextText});
             this.setCookie('comments', this.state.text, 1);
+            videos[n].comments.push(this.state.text);
+            localStorage.setItem("videos", JSON.stringify(videos));
         }
     },
     onChange: function (e) {
@@ -129,6 +132,8 @@ var Video = React.createClass({
         //console.log(this.state);
         this.setState({rating: this.state.rating+=1});
         this.setCookie('rating', this.state.rating+=1, 1);
+        videos[n].rating+=1;
+        localStorage.setItem("videos", JSON.stringify(videos));
     },
 
     setCookie: function(cname, cvalue, exdays) {
@@ -150,7 +155,7 @@ var Video = React.createClass({
         };
 
         videos.push(x);
-        localStorage.setItem(this.state.newTitle, x);
+        localStorage.setItem("videos", JSON.stringify(videos));
 
 /*      this.setCookie('title', this.state.newTitle, 1);
         this.setCookie('url', this.state.newUrl, 1);
@@ -282,6 +287,8 @@ var ShowAllVideos = React.createClass({
         videos.splice(i, 1);
         console.log(videos);
         this.forceUpdate();
+        localStorage.setItem("videos", JSON.stringify(videos));
+
     },
 
     render: function() {
@@ -306,32 +313,37 @@ var ShowAllVideos = React.createClass({
         );
     }
 });
-
-// DB
-var videos = [{
-        title: 'Winter Barn',
-        url: 'https://m.youtube.com/watch?v=_xkn0ceDreo', //OBS KRÄVS SPECIELL EMBED URL /Den funkar inte på mobila eneheter, utan då försöker den tvinga en öppning av appen i stället
-        rating: 3,
-        thumbnail: 'http://img.youtube.com/vi/_xkn0ceDreo/0.jpg',
-        category: 'Painting',
-        comments: ['A winterbarn comment']
-    },
-    {
-        title: 'Sunset Oval',
-        url: 'https://m.youtube.com/watch?v=9xG6IzcGotI',
-        rating: 5,
-        thumbnail: 'http://img.youtube.com/vi/9xG6IzcGotI/0.jpg',
-        category: 'Painting',
-        comments: ['A sunsetoval comment']
-    },
-    {
-        title: 'Lakeside Path',
-        url: 'https://m.youtube.com/watch?v=1yjGoJokbZg',
-        rating: 2,
-        thumbnail: 'http://img.youtube.com/vi/1yjGoJokbZg/0.jpg',
-        category: 'Painting',
-        comments: ['A lakesidepath comment']
-    }
-];
-
+//localStorage.clear();
+if (localStorage.getItem("videos")===null) {
+    console.log("No localStorage found");
+    // DB
+    var videos = [{
+            title: 'Winter Barn',
+            url: 'https://m.youtube.com/watch?v=_xkn0ceDreo', //OBS KRÄVS SPECIELL EMBED URL /Den funkar inte på mobila eneheter, utan då försöker den tvinga en öppning av appen i stället
+            rating: 3,
+            thumbnail: 'http://img.youtube.com/vi/_xkn0ceDreo/0.jpg',
+            category: 'Painting',
+            comments: ['A winterbarn comment', 'A second winterbarn comment']
+        },
+        {
+            title: 'Sunset Oval',
+            url: 'https://m.youtube.com/watch?v=9xG6IzcGotI',
+            rating: 5,
+            thumbnail: 'http://img.youtube.com/vi/9xG6IzcGotI/0.jpg',
+            category: 'Painting',
+            comments: ['A sunsetoval comment']
+        },
+        {
+            title: 'Lakeside Path',
+            url: 'https://m.youtube.com/watch?v=1yjGoJokbZg',
+            rating: 2,
+            thumbnail: 'http://img.youtube.com/vi/1yjGoJokbZg/0.jpg',
+            category: 'Painting',
+            comments: ['A lakesidepath comment']
+        }
+    ];
+}else{
+    console.log("Local storage found!");
+    var videos = JSON.parse(localStorage.getItem("videos"));
+};
 ReactDOM.render(<Main />, document.getElementById('root'));
