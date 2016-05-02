@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html >
+  <head>
+
+    <!-- CONFIGURATION -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+
+    <!-- Allow web app to be run in full-screen mode. -->
+    <meta name="apple-mobile-web-app-capable"
+          content="yes">
+
+    <!-- Make the app title different than the page title. -->
+    <meta name="apple-mobile-web-app-title"
+          content="Learn to paint">
+
+    <!-- Configure the status bar. -->
+    <meta name="apple-mobile-web-app-status-bar-style"
+          content="black">
+
+    <!-- Set the viewport. -->
+    <meta name="viewport"
+          content="initial-scale=1">
+
+    <!-- Disable automatic phone number detection. -->
+    <meta name="format-detection"
+          content="telephone=no">
+
+
+    <link href="https://placehold.it/114"
+          sizes="114x114"
+          rel="apple-touch-icon-precomposed">
+
+    <link href="https://placehold.it/750x1294"
+          media="(device-width: 375px) and (device-height: 667px)
+                 and (-webkit-device-pixel-ratio: 2)"
+          rel="apple-touch-startup-image">
+
+
+    <meta charset="UTF-8">
+    <title>Super Simple Chat App</title>
+    
+    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+    <link rel="stylesheet" href="css/style.css">
+
+    
+    
+    
+  </head>
+
+  <body>
+
+    <header>
+  <h1>Super Duper Simple Chat</h1>
+  <h2>Powered by PubNub</h2>
+</header>
+
+<section id="main" role="main">
+  <div id="chat">
+    <i id="avatar" class="face12"></i>
+    <input type="text" id="input" placeholder="Type your message..."> 
+    <button id="button">Send</button>
+  </div>
+  
+
+  <p id="presence"></p>
+  <div id="output"></div>
+</section>
+    <script src='http://cdn.pubnub.com/pubnub-3.7.13.min.js'></script>
+
+        <script src="js/index.js"></script>
+
+    
+    
+    
+  </body>
+</html>
