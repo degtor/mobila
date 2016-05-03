@@ -10,6 +10,7 @@
     presence = document.querySelector('#presence');
 
   var channel = getLocation();
+  var subChannel = channel;
 
   function getLocation() {
     if (navigator.geolocation) {
@@ -22,7 +23,7 @@
   }
 
   /*var o = {p: ''};*/
-
+  
   function showPosition(position) {
     var direction = position.coords.heading;
     var dir = '';
@@ -48,6 +49,26 @@
     channel = dir;
     return dir;
   }
+  function getDirection(degrees) {
+    if (degrees < 90) {
+      direction = 'north';
+      test.innerHTML = "Nu blev jag: " + direction + degrees;
+      var o = { p: direction };
+    } else if (degrees < 180) {
+      direction = 'east';
+      test.innerHTML = "Nu blev jag: " + direction + degrees;
+      var o = { p: direction };
+    } else if (degrees < 270) {
+      direction = 'south';
+      test.innerHTML = "Nu blev jag: " + direction + degrees;
+      var o = { p: direction };
+    } else if (degrees <= 360) {
+      direction = 'west';
+      test.innerHTML = "Nu blev jag: " + direction + degrees;
+      var o = { p: direction };
+    }
+    return direction;
+  }
 
 /*  o.watch('p', function(id, oldval, newval) {
       alert(id + oldval + newval);
@@ -68,20 +89,8 @@
     subscribe_key: 'sub-c-9d3f64ec-0dff-11e6-bb6c-02ee2ddab7fe',
     publish_key: 'pub-c-0961bed5-2de7-4080-9a75-91a4c9312105'
   });
-
-  p.subscribe({
-    channel: channel,
-    callback: function(m) {
-      output.innerHTML = '<p><i class="' + m.avatar + '"></i><span>' + m.text.replace(/[<>]/ig, '') + '</span></p>' + output.innerHTML;
-    },
-    presence: function(m) {
-      if (m.occupancy > 1) {
-        presence.textContent = m.occupancy + ' people online';
-      } else {
-        presence.textContent = 'Nobody else is online';
-      }
-    }
-  });
+  console.log("Channel: " + channel);
+  subscribe();
 
   p.bind('keyup', input, function(e) {
     (e.keyCode || e.charCode) === 13 && publish()
@@ -89,6 +98,42 @@
 
   p.bind('click', button, publish);
   p.bind('click', MasterView, viewAll);
+
+  function subscribe() {
+    if (channel=== parseFloat(channel, 10)) {
+      console.log("Channel was a number");
+      channel = getDirection(channel);
+      console.log("Chanel should now be: " + channel);
+    } 
+      console.log("Subscribing to: " + channel);
+      p.subscribe({
+        channel: channel,
+        callback: function(m) {
+          output.innerHTML = '<p><i class="' + m.avatar + '"></i><span>' + m.text.replace(/[<>]/ig, '') + '</span></p>' + output.innerHTML;
+        },
+        presence: function(m) {
+          if (m.occupancy > 1) {
+            presence.textContent = m.occupancy + ' people online';
+          } else {
+            presence.textContent = 'Nobody else is online';
+          }
+        }
+      });
+  }
+
+  function reSub() {
+    if (channel != subChannel) {
+      p.unsubscribe({
+        channel : channel,
+        callback: function(m) {
+          console.log(m);
+          output.innerHTML ="";
+        }
+      });
+      subChannel = channel;
+      subscribe();
+    } else {}
+  }
 
   function viewAll() {
     //Creates 4 divs that outputs for all our lovely channels
@@ -103,7 +148,6 @@
           console.log(m);
           output.innerHTML ="";
         }
-        
       });
 
       p.subscribe({
@@ -115,7 +159,7 @@
       })
       pressed = true;
     } else{
-      chat = document.querySelector('#chat');
+      chat.innerHTML = document.querySelector('#chat');
       masterButton.innerHTML = 'MasterView';
 
       p.unsubscribe({
@@ -144,7 +188,8 @@
   }
 
   function publish() {
-    console.log(channel);
+    console.log("Skickar till " + channel);
+    reSub();
     p.publish({
       channel: channel,
       message: {
