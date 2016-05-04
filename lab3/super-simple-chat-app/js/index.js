@@ -11,7 +11,7 @@
 
   var channel = getLocation();
   var subChannel = channel;
-
+  var chatBackup = chat;
   function getLocation() {
     if (navigator.geolocation) {
       var hehe = navigator.geolocation.watchPosition(showPosition);
@@ -31,19 +31,19 @@
 
     if (direction < 90) {
       dir = 'north';
-      test.innerHTML = "Nu blev jag: " + dir + direction;
+      test.innerHTML = "Channel: " +dir;
       var o = { p: dir };
     } else if (direction < 180) {
       dir = 'east';
-      test.innerHTML = "Nu blev jag: " + dir + direction;
+      test.innerHTML = "Channel: " +dir;
       var o = { p: dir };
     } else if (direction < 270) {
       dir = 'south';
-      test.innerHTML = "Nu blev jag: " + dir + direction;
+      test.innerHTML = "Channel: " +dir;
       var o = { p: dir };
     } else if (direction <= 360) {
       dir = 'west';
-      test.innerHTML = "Nu blev jag: " + dir + direction;
+      test.innerHTML ="Channel: " +dir;
       var o = { p: dir };
     }
     channel = dir;
@@ -52,19 +52,19 @@
   function getDirection(degrees) {
     if (degrees < 90) {
       direction = 'north';
-      test.innerHTML = "Nu blev jag: " + direction + degrees;
+      test.innerHTML = direction;
       var o = { p: direction };
     } else if (degrees < 180) {
       direction = 'east';
-      test.innerHTML = "Nu blev jag: " + direction + degrees;
+      test.innerHTML = direction;
       var o = { p: direction };
     } else if (degrees < 270) {
       direction = 'south';
-      test.innerHTML = "Nu blev jag: " + direction + degrees;
+      test.innerHTML =direction;
       var o = { p: direction };
     } else if (degrees <= 360) {
       direction = 'west';
-      test.innerHTML = "Nu blev jag: " + direction + degrees;
+      test.innerHTML =direction;
       var o = { p: direction };
     }
     return direction;
@@ -139,7 +139,8 @@
     //Creates 4 divs that outputs for all our lovely channels
    if (pressed == false) {
 
-      chat.innerHTML = '',
+      //chat.innerHTML = '',
+      document.getElementById("chat").style.visibility = "hidden";
       masterButton.innerHTML = 'Chat',
 
       p.unsubscribe({
@@ -159,7 +160,10 @@
       })
       pressed = true;
     } else{
-      chat.innerHTML = document.querySelector('#chat');
+      console.log(chatBackup);
+      //chat.innerHTML = '';
+      document.getElementById("chat").style.visibility = "visible";
+      
       masterButton.innerHTML = 'MasterView';
 
       p.unsubscribe({
