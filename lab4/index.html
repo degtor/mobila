@@ -1,0 +1,61 @@
+<html>
+<head>
+
+    <!-- CONFIGURATION -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- Allow web app to be run in full-screen mode. -->
+    <meta name="apple-mobile-web-app-capable"
+          content="yes">
+    <!-- Make the app title different than the page title. -->
+    <meta name="apple-mobile-web-app-title"
+          content="Learn to paint">
+    <!-- Configure the status bar. -->
+    <meta name="apple-mobile-web-app-status-bar-style"
+          content="black">
+    <!-- Set the viewport. -->
+    <meta name="viewport"
+          content="initial-scale=1">
+    <!-- Disable automatic phone number detection. -->
+    <meta name="format-detection"
+          content="telephone=no">
+    <link href="https://placehold.it/114"
+          sizes="114x114"
+          rel="apple-touch-icon-precomposed">
+    <link href="https://placehold.it/750x1294"
+          media="(device-width: 375px) and (device-height: 667px)
+                 and (-webkit-device-pixel-ratio: 2)"
+          rel="apple-touch-startup-image">
+
+    <meta name="viewport" content="width=device-width, user-scalable=no,
+        shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Getting some data from a json API</title>
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.css" />
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <!-- This script, cordova.js,  is built into Evothings Viewer (i.e. you won't need to add this file to your project) The idea is to pick up a http resource, even if you're using https, which would normally create a cross-protocol violation. The HTTP plug-in from Apache Cordova allows this to be carried out, see especially this post: https://evothings.com/evothings-secured-now-serving-over-https/ -->
+
+    <script src="script.js"></script>
+    <script src="gCharts.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+<body>
+<header id="header">
+</header>
+<div id="root"></div>
+<script src="https://fb.me/react-15.0.1.js"></script>
+<script src="https://fb.me/react-dom-15.0.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+<script type="text/babel" src="script.jsx"></script>
+<script type="text/babel" src="header.jsx"></script>
+<button onclick="history.back()">Exit</button><br />
+
+<button onClick="getJSON();">Retrieve some sensor data</button>
+<div id="chart_div" style="width: 400px; height: 120px;"></div>
+<div id="printHere"></div>
+</body>
+</html>
