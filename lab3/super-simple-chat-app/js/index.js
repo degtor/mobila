@@ -1,5 +1,16 @@
 (function() {
-
+  var degrees = 0;
+  var channel;
+  window.addEventListener('deviceorientation', function() {
+    if (event.webkitCompassHeading) {
+      channel = getDirection(event.webkitCompassHeading);
+      //test.innerHTML=degrees;
+      if (channel != subChannel) {
+        reSub();
+        output.innerHTML='';
+      }
+    }
+  })
   var chat = document.querySelector('#chat'),
     output = document.querySelector('#output'),
     input = document.querySelector('#input'),
@@ -9,7 +20,6 @@
     test = document.querySelector('#test'),
     presence = document.querySelector('#presence');
 
-  var channel = getLocation();
   var subChannel = channel;
   var chatBackup = chat;
   function getLocation() {
@@ -23,7 +33,7 @@
   }
 
   /*var o = {p: ''};*/
-  
+  /*
   function showPosition(position) {
     var direction = position.coords.heading;
     var dir = '';
@@ -48,23 +58,23 @@
     }
     channel = dir;
     return dir;
-  }
+  }*/
   function getDirection(degrees) {
     if (degrees < 90) {
       direction = 'north';
-      test.innerHTML = direction;
+      test.innerHTML = "Channel: " + direction + " Degrees: " + degrees;
       var o = { p: direction };
     } else if (degrees < 180) {
       direction = 'east';
-      test.innerHTML = direction;
+      test.innerHTML = "Channel: " + direction + " Degrees: " + degrees;
       var o = { p: direction };
     } else if (degrees < 270) {
       direction = 'south';
-      test.innerHTML =direction;
+      test.innerHTML ="Channel: " + direction + " Degrees: " + degrees;
       var o = { p: direction };
     } else if (degrees <= 360) {
       direction = 'west';
-      test.innerHTML =direction;
+      test.innerHTML ="Channel: " + direction + " Degrees: " + degrees;
       var o = { p: direction };
     }
     return direction;
@@ -132,7 +142,7 @@
       });
       subChannel = channel;
       subscribe();
-    } else {}
+    }
   }
 
   function viewAll() {
