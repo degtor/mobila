@@ -11,6 +11,10 @@
 ul{
         list-style-type: none;
 }
+
+#root {
+    text-align:center;
+}
 .small {
     width: 25%;
     height: 100%;
